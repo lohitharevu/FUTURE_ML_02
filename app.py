@@ -1,0 +1,207 @@
+import streamlit as st
+import pandas as pd
+
+from utils.predictor import predict_ticket, get_sla, assign_team
+from utils.analytics import get_kpis, category_distribution, priority_distribution
+from utils.insights import executive_summary
+
+
+# ==========================================
+# PAGE CONFIG
+# ==========================================
+
+st.set_page_config(
+    page_title="TicketMind AI",
+    page_icon="🎫",
+    layout="wide"
+)
+
+# ==========================================
+# STARTUP DARK THEME
+# ==========================================
+
+st.markdown("""
+<style>
+
+.main {
+    background-color: #0b1220;
+    color: white;
+}
+
+section[data-testid="stSidebar"] {
+    background-color: #070b14;
+}
+
+/* KPI cards */
+.stMetric {
+    background-color: #111827;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+/* hide streamlit branding */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# ==========================================
+# SIDEBAR HEADER
+# ==========================================
+
+st.sidebar.title("🎫 TicketMind AI")
+st.sidebar.markdown("### AI Ticket Classifier")
+st.sidebar.markdown("---")
+
+
+# ==========================================
+# SESSION STATE NAVIGATION
+# ==========================================
+
+if "page" not in st.session_state:
+    st.session_state.page = "dashboard"
+
+
+# ==========================================
+# MULTICOLOR SIDEBAR BUTTONS
+# ==========================================
+
+if st.sidebar.button("🏠 Dashboard", key="dash"):
+    st.session_state.page = "dashboard"
+
+if st.sidebar.button("🔍 AI Ticket Classifier", key="cls"):
+    st.session_state.page = "classifier"
+
+if st.sidebar.button("📊 Analytics", key="ana"):
+    st.session_state.page = "analytics"
+
+if st.sidebar.button("🧠 AI Insights", key="ins"):
+    st.session_state.page = "insights"
+
+
+st.sidebar.markdown("---")
+st.sidebar.info("🚀 Startup Mode Active")
+
+
+# ==========================================
+# LOAD DATA
+# ==========================================
+
+kpis = get_kpis()
+page = st.session_state.page
+
+
+# ==========================================
+# DASHBOARD PAGE
+# ==========================================
+
+if page == "dashboard":
+
+    st.title("🚀 AI based Ticket Classification")
+
+    st.write("Real-time AI-powered ticket classification and support analytics system.")
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    col1.metric("Total Tickets", kpis["total_tickets"])
+    col2.metric("High Priority", kpis["high_priority"])
+    col3.metric("Medium Priority", kpis["medium_priority"])
+    col4.metric("Low Priority", kpis["low_priority"])
+
+    st.markdown("---")
+
+    c1, c2 = st.columns(2)
+
+    with c1:
+        st.subheader("📊 Category Distribution")
+        st.bar_chart(category_distribution().set_index("Category"))
+
+    with c2:
+        st.subheader("⚡ Priority Distribution")
+        st.bar_chart(priority_distribution().set_index("Priority"))
+
+
+# ==========================================
+# AI CLASSIFIER PAGE
+# ==========================================
+
+elif page == "classifier":
+
+    st.title("🧠 AI Ticket Classifier")
+
+    st.write("Enter a customer ticket and let AI classify category + priority instantly.")
+
+    ticket_text = st.text_area("Customer Ticket Description", height=150)
+
+    if st.button("Analyze Ticket"):
+
+        if ticket_text.strip() == "":
+            st.warning("Please enter ticket description.")
+        else:
+
+            result = predict_ticket(ticket_text)
+
+            sla = get_sla(result["priority"])
+            team = assign_team(result["category"])
+
+            st.markdown("## 🎯 Prediction Result")
+
+            c1, c2, c3 = st.columns(3)
+
+            c1.metric("Category", result["category"])
+            c2.metric("Priority", result["priority"])
+            c3.metric("Confidence", result["confidence_score"])
+
+            st.markdown("### Routing Output")
+
+            st.info(f"👨‍💻 Assigned Team: {team}")
+            st.info(f"⏱ SLA Response Time: {sla}")
+
+
+# ==========================================
+# ANALYTICS PAGE
+# ==========================================
+
+elif page == "analytics":
+
+    st.title("📊 Business Analytics Dashboard")
+
+    st.subheader("Category Insights")
+    st.bar_chart(category_distribution().set_index("Category"))
+
+    st.subheader("Priority Insights")
+    st.bar_chart(priority_distribution().set_index("Priority"))
+
+
+# ==========================================
+# INSIGHTS PAGE
+# ==========================================
+
+elif page == "insights":
+
+    st.title("🧠 AI Business Insights Engine")
+
+    insights = executive_summary()
+
+    for i in insights:
+        st.write("✔", i)
+
+    st.markdown("---")
+
+    st.success("🚀 System recommends improving SLA handling and automating ticket routing.")
+
+
+# ==========================================
+# DISCLAIMER
+# ==========================================
+
+st.markdown("---")
+
+st.warning("""
+⚠️ DISCLAIMER:  
+The predictions, classifications, and insights generated by this system  
+are based on the training dataset and statistical patterns learned by the machine learning model.  
+They should be used as decision-support information and not as absolute truth.
+""")
