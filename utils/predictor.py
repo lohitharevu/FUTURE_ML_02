@@ -1,31 +1,16 @@
 import joblib
 import numpy as np
 
-# ==========================================
-# LOAD MODELS
-# ==========================================
-
 category_model = joblib.load("models/category_model.pkl")
 priority_model = joblib.load("models/priority_model.pkl")
 
 category_vectorizer = joblib.load("models/tfidf_vectorizer.pkl")
 priority_vectorizer = joblib.load("models/priority_vectorizer.pkl")
-
-
-# ==========================================
-# TEXT PREPROCESSING (LIGHT CLEANING)
-# ==========================================
-
 def clean_input(text):
     if not text:
         return ""
 
     return text.lower().strip()
-
-
-# ==========================================
-# CATEGORY PREDICTION
-# ==========================================
 
 def predict_category(text):
 
@@ -37,11 +22,6 @@ def predict_category(text):
 
     return prediction
 
-
-# ==========================================
-# PRIORITY PREDICTION
-# ==========================================
-
 def predict_priority(text):
 
     text = clean_input(text)
@@ -51,11 +31,6 @@ def predict_priority(text):
     prediction = priority_model.predict(vec)[0]
 
     return prediction
-
-
-# ==========================================
-# FULL TICKET PREDICTION (MAIN FUNCTION)
-# ==========================================
 
 def predict_ticket(text):
 
@@ -82,11 +57,6 @@ def predict_ticket(text):
         "confidence_score": round(confidence, 2)
     }
 
-
-# ==========================================
-# RESPONSE SLA (BUSINESS LOGIC)
-# ==========================================
-
 def get_sla(priority):
 
     if priority == "High":
@@ -97,11 +67,6 @@ def get_sla(priority):
 
     else:
         return "24 Hours"
-
-
-# ==========================================
-# ROUTING LOGIC
-# ==========================================
 
 def assign_team(category):
 

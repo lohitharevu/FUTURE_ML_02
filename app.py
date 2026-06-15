@@ -5,20 +5,11 @@ from utils.predictor import predict_ticket, get_sla, assign_team
 from utils.analytics import get_kpis, category_distribution, priority_distribution
 from utils.insights import executive_summary
 
-
-# ==========================================
-# PAGE CONFIG
-# ==========================================
-
 st.set_page_config(
     page_title="TicketMind AI",
     page_icon="🎫",
     layout="wide"
 )
-
-# ==========================================
-# STARTUP DARK THEME
-# ==========================================
 
 st.markdown("""
 <style>
@@ -46,27 +37,13 @@ footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
-
-# ==========================================
-# SIDEBAR HEADER
-# ==========================================
-
 st.sidebar.title("🎫 TicketMind AI")
 st.sidebar.markdown("### AI Ticket Classifier")
 st.sidebar.markdown("---")
 
 
-# ==========================================
-# SESSION STATE NAVIGATION
-# ==========================================
-
 if "page" not in st.session_state:
     st.session_state.page = "dashboard"
-
-
-# ==========================================
-# MULTICOLOR SIDEBAR BUTTONS
-# ==========================================
 
 if st.sidebar.button("🏠 Dashboard", key="dash"):
     st.session_state.page = "dashboard"
@@ -84,18 +61,8 @@ if st.sidebar.button("🧠 AI Insights", key="ins"):
 st.sidebar.markdown("---")
 st.sidebar.info("🚀 Startup Mode Active")
 
-
-# ==========================================
-# LOAD DATA
-# ==========================================
-
 kpis = get_kpis()
 page = st.session_state.page
-
-
-# ==========================================
-# DASHBOARD PAGE
-# ==========================================
 
 if page == "dashboard":
 
@@ -121,11 +88,6 @@ if page == "dashboard":
     with c2:
         st.subheader("⚡ Priority Distribution")
         st.bar_chart(priority_distribution().set_index("Priority"))
-
-
-# ==========================================
-# AI CLASSIFIER PAGE
-# ==========================================
 
 elif page == "classifier":
 
@@ -159,11 +121,6 @@ elif page == "classifier":
             st.info(f"👨‍💻 Assigned Team: {team}")
             st.info(f"⏱ SLA Response Time: {sla}")
 
-
-# ==========================================
-# ANALYTICS PAGE
-# ==========================================
-
 elif page == "analytics":
 
     st.title("📊 Business Analytics Dashboard")
@@ -173,11 +130,6 @@ elif page == "analytics":
 
     st.subheader("Priority Insights")
     st.bar_chart(priority_distribution().set_index("Priority"))
-
-
-# ==========================================
-# INSIGHTS PAGE
-# ==========================================
 
 elif page == "insights":
 
@@ -191,11 +143,6 @@ elif page == "insights":
     st.markdown("---")
 
     st.success("🚀 System recommends improving SLA handling and automating ticket routing.")
-
-
-# ==========================================
-# DISCLAIMER
-# ==========================================
 
 st.markdown("---")
 

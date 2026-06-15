@@ -2,11 +2,6 @@ import pandas as pd
 
 from predictor import assign_team, get_sla
 
-
-# ==========================================
-# ROUTE SINGLE TICKET
-# ==========================================
-
 def route_ticket(ticket_text, category, priority):
 
     team = assign_team(category)
@@ -16,12 +11,6 @@ def route_ticket(ticket_text, category, priority):
         "assigned_team": team,
         "response_sla": sla
     }
-
-
-# ==========================================
-# ESCALATION LOGIC
-# ==========================================
-
 def check_escalation(priority, sentiment_score=None):
 
     """
@@ -38,12 +27,6 @@ def check_escalation(priority, sentiment_score=None):
             return True
 
     return False
-
-
-# ==========================================
-# TEAM LOAD DISTRIBUTION
-# ==========================================
-
 def team_workload(df):
 
     """
@@ -59,12 +42,6 @@ def team_workload(df):
     workload.columns = ["Team", "Ticket Count"]
 
     return workload
-
-
-# ==========================================
-# PRIORITY BASED QUEUE ORDERING
-# ==========================================
-
 def prioritize_queue(df):
 
     priority_map = {
@@ -78,11 +55,6 @@ def prioritize_queue(df):
     sorted_df = df.sort_values(by="priority_rank", ascending=True)
 
     return sorted_df
-
-
-# ==========================================
-# AUTO ROUTING SUMMARY
-# ==========================================
 
 def routing_summary(df):
 

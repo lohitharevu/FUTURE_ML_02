@@ -3,18 +3,9 @@ import numpy as np
 import re
 from datetime import datetime
 
-# ==========================================
-# LOAD RAW DATA
-# ==========================================
-
 def load_data():
     df = pd.read_csv("data/tickets.csv")
     return df
-
-
-# ==========================================
-# TEXT CLEANING FUNCTION (NLP PREPROCESSING)
-# ==========================================
 
 def clean_text(text):
     if pd.isnull(text):
@@ -30,11 +21,6 @@ def clean_text(text):
 
     return text
 
-
-# ==========================================
-# PRIORITY MAPPING (IF NEEDED FOR BALANCE)
-# ==========================================
-
 def normalize_priority(priority):
     if pd.isnull(priority):
         return "Low"
@@ -48,17 +34,9 @@ def normalize_priority(priority):
     else:
         return "Low"
 
-
-# ==========================================
-# MAIN PREPROCESSING PIPELINE
-# ==========================================
-
 def create_dataset():
     df = load_data()
 
-    # ------------------------------------------
-    # TEXT FEATURES
-    # ------------------------------------------
     df["Ticket Description Clean"] = df["Ticket Description"].apply(clean_text)
     df["Ticket Subject Clean"] = df["Ticket Subject"].apply(clean_text)
 
@@ -67,19 +45,9 @@ def create_dataset():
         df["Ticket Subject Clean"] + " " + df["Ticket Description Clean"]
     )
 
-    # ------------------------------------------
-    # TARGET 1: CATEGORY (Ticket Type)
-    # ------------------------------------------
     df["Category"] = df["Ticket Type"]
 
-    # ------------------------------------------
-    # TARGET 2: PRIORITY
-    # ------------------------------------------
     df["Priority"] = df["Ticket Priority"].apply(normalize_priority)
-
-    # ------------------------------------------
-    # TIME FEATURES
-    # ------------------------------------------
     df["Date of Purchase"] = pd.to_datetime(df["Date of Purchase"])
 
     df["Year"] = df["Date of Purchase"].dt.year
@@ -87,18 +55,12 @@ def create_dataset():
     df["Day"] = df["Date of Purchase"].dt.day
     df["Weekday"] = df["Date of Purchase"].dt.weekday
 
-    # ------------------------------------------
-    # CUSTOMER FEATURES (OPTIONAL ENRICHMENT)
-    # ------------------------------------------
     df["Customer Age Group"] = pd.cut(
         df["Customer Age"],
         bins=[0, 18, 30, 45, 60, 100],
         labels=["Teen", "Young", "Adult", "MidAge", "Senior"]
     )
 
-    # ------------------------------------------
-    # DROP UNNECESSARY COLUMNS FOR MODEL TRAINING
-    # ------------------------------------------
     drop_cols = [
         "Ticket ID",
         "Customer Name",
@@ -108,19 +70,10 @@ def create_dataset():
     ]
 
     df_final = df.drop(columns=drop_cols, errors="ignore")
-
-    # ------------------------------------------
-    # SAVE PROCESSED DATASET
-    # ------------------------------------------
     df_final.to_csv("data/processed_tickets.csv", index=False)
 
     print("✅ Dataset created successfully!")
     print("Saved at: data/processed_tickets.csv")
-
-
-# ==========================================
-# RUN SCRIPT
-# ==========================================
 
 if __name__ == "__main__":
     create_dataset()

@@ -13,11 +13,6 @@ from analytics import (
 
 from insights import executive_summary
 
-
-# ==========================================
-# DASHBOARD METRICS (MAIN OVERVIEW)
-# ==========================================
-
 def dashboard_metrics():
 
     kpis = get_kpis()
@@ -30,11 +25,6 @@ def dashboard_metrics():
         "health_score": health
     }
 
-
-# ==========================================
-# CHART DATA PROVIDERS
-# ==========================================
-
 def chart_data():
 
     return {
@@ -46,19 +36,9 @@ def chart_data():
         "product_analysis": product_analysis()
     }
 
-
-# ==========================================
-# EXECUTIVE INSIGHTS
-# ==========================================
-
 def ai_insights():
 
     return executive_summary()
-
-
-# ==========================================
-# FULL DASHBOARD DATA PACKAGE
-# ==========================================
 
 def get_dashboard_data():
 
@@ -70,11 +50,6 @@ def get_dashboard_data():
 
         "insights": ai_insights()
     }
-
-
-# ==========================================
-# FILTERED DASHBOARD VIEW (OPTIONAL)
-# ==========================================
 
 def filtered_dashboard(df, priority=None, category=None):
 

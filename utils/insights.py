@@ -1,17 +1,8 @@
 import pandas as pd
 
-# ==========================================
-# LOAD DATA
-# ==========================================
-
 def load_data():
     df = pd.read_csv("data/processed_tickets.csv")
     return df
-
-
-# ==========================================
-# OVERALL TICKET INSIGHTS
-# ==========================================
 
 def ticket_insights():
 
@@ -37,11 +28,6 @@ def ticket_insights():
 
     return insights
 
-
-# ==========================================
-# CATEGORY INSIGHTS
-# ==========================================
-
 def category_insights():
 
     df = load_data()
@@ -62,11 +48,6 @@ def category_insights():
 
     return insights
 
-
-# ==========================================
-# PRODUCT INSIGHTS
-# ==========================================
-
 def product_insights():
 
     df = load_data()
@@ -83,11 +64,6 @@ def product_insights():
     insights.append("High ticket volume for a product may indicate quality or usability issues.")
 
     return insights
-
-
-# ==========================================
-# CUSTOMER EXPERIENCE INSIGHTS
-# ==========================================
 
 def customer_experience_insights():
 
@@ -108,11 +84,6 @@ def customer_experience_insights():
 
     return insights
 
-
-# ==========================================
-# SLA & RESPONSE INSIGHTS
-# ==========================================
-
 def sla_insights():
 
     df = load_data()
@@ -131,11 +102,6 @@ def sla_insights():
         insights.append("Resolution time is within acceptable range.")
 
     return insights
-
-
-# ==========================================
-# EXECUTIVE SUMMARY
-# ==========================================
 
 def executive_summary():
 

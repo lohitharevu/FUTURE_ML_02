@@ -1,17 +1,8 @@
 import pandas as pd
 
-# ==========================================
-# LOAD DATA
-# ==========================================
-
 def load_data():
     df = pd.read_csv("data/processed_tickets.csv")
     return df
-
-
-# ==========================================
-# KPI METRICS
-# ==========================================
 
 def get_kpis():
 
@@ -33,11 +24,6 @@ def get_kpis():
         "avg_satisfaction": round(avg_satisfaction, 2)
     }
 
-
-# ==========================================
-# CATEGORY DISTRIBUTION
-# ==========================================
-
 def category_distribution():
 
     df = load_data()
@@ -51,11 +37,6 @@ def category_distribution():
     category.columns = ["Category", "Count"]
 
     return category
-
-
-# ==========================================
-# PRIORITY DISTRIBUTION
-# ==========================================
 
 def priority_distribution():
 
@@ -71,11 +52,6 @@ def priority_distribution():
 
     return priority
 
-
-# ==========================================
-# TICKET CHANNEL ANALYSIS
-# ==========================================
-
 def channel_analysis():
 
     df = load_data()
@@ -89,11 +65,6 @@ def channel_analysis():
     channel.columns = ["Channel", "Count"]
 
     return channel
-
-
-# ==========================================
-# MONTHLY TICKET TRENDS
-# ==========================================
 
 def monthly_trends():
 
@@ -111,11 +82,6 @@ def monthly_trends():
 
     return monthly
 
-
-# ==========================================
-# PRODUCT WISE ANALYSIS
-# ==========================================
-
 def product_analysis():
 
     df = load_data()
@@ -129,11 +95,6 @@ def product_analysis():
     products.columns = ["Product", "Tickets"]
 
     return products
-
-
-# ==========================================
-# SLA PERFORMANCE
-# ==========================================
 
 def sla_analysis():
 
@@ -150,11 +111,6 @@ def sla_analysis():
     return {
         "avg_resolution_time": round(avg_resolution_time, 2)
     }
-
-
-# ==========================================
-# SUPPORT HEALTH SCORE
-# ==========================================
 
 def support_health_score():
 
